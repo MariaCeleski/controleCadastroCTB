@@ -25,7 +25,8 @@ export function CompanyForm() {
     if (form.companyName.trim().length < 3)
       return setError('Informe uma razão social com pelo menos 3 caracteres.');
     if (!isValidCnpj(form.cnpj)) return setError('Informe um CNPJ válido.');
-    setError(undefined); /* The API integration will persist this command. */
+    setError(undefined);
+    // The API integration replaces this temporary client-side success path; validation remains for immediate feedback.
   };
   return (
     <form className="content-card" onSubmit={submit}>

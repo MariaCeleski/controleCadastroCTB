@@ -11,6 +11,7 @@ public sealed class AuthController(IIdentityService identity, IValidator<Registe
     [HttpPost("register-organization")]
     public async Task<IActionResult> RegisterOrganization(RegisterOrganizationRequest request, CancellationToken cancellationToken)
     {
+        // This bootstraps a new customer tenant and its first administrator in one operation.
         var validation = await registrationValidator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid) return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
         await identity.RegisterOrganizationAsync(request, cancellationToken);

@@ -11,11 +11,13 @@ public sealed class CompanyService(AccessControlDbContext db, ICredentialCipher 
     public async Task<CompanySummary> CreateAsync(Guid organizationId, CreateCompanyRequest request, CancellationToken cancellationToken)
     {
         var cnpj = new string(request.Cnpj.Where(char.IsDigit).ToArray());
+        // Always include the organization boundary: it prevents cross-customer data access.
         var exists = await db.Companies.AnyAsync(x => x.OrganizationId == organizationId && x.CnpjDigits == cnpj, cancellationToken);
         if (exists) throw new InvalidOperationException("Já existe uma empresa com este CNPJ.");
         var company = new Company(organizationId, request.CompanyName, cnpj, request.StateRegistration);
         company.ReplaceCredentials(request.Credentials.Select(x => new AccessCredential(company.Id, x.ModuleKey, x.Label, x.Username, cipher.Encrypt(x.Password))));
         db.Companies.Add(company);
+        // Credentials are explicitly persisted because the domain collection is deliberately read-only to EF.
         db.Credentials.AddRange(company.Credentials);
         await db.SaveChangesAsync(cancellationToken);
         return new CompanySummary(company.Id, company.CompanyName, company.CnpjDigits, company.StateRegistration, company.UpdatedAt);
