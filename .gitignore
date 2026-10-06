@@ -1,0 +1,21 @@
+# Build outputs and dependencies
+node_modules/
+dist/
+coverage/
+bin/
+obj/
+TestResults/
+
+# Local secrets and IDE files
+.env
+.env.*.local
+!.env.example
+apps/backend/**/appsettings.Development.json
+.idea/
+.vscode/
+*.user
+*.suo
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,34 @@
+# Controle de Acessos
+
+Monorepo para a plataforma desktop de cadastro de empresas e controle seguro de credenciais.
+
+## Estrutura
+
+- `apps/frontend`: interface React, preparada para empacotamento posterior com Tauri.
+- `apps/backend`: API ASP.NET Core e camadas de domínio, aplicação e infraestrutura.
+- `.github/workflows`: validação contínua e publicação de artefatos.
+
+## Desenvolvimento local
+
+### Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+### Backend
+
+Instale o .NET SDK 10 e execute em uma máquina com PostgreSQL configurado:
+
+```bash
+dotnet restore apps/backend/AccessControl.sln
+dotnet test apps/backend/AccessControl.sln --configuration Release
+dotnet run --project apps/backend/src/AccessControl.Api
+```
+
+Copie `apps/backend/src/AccessControl.Api/appsettings.Development.example.json` para `appsettings.Development.json` e informe a conexão local. Esse arquivo não deve ser enviado ao Git.
+
+## Qualidade e entrega
+
+O workflow de CI executa lint, testes e build a cada pull request. O workflow de release só publica artefatos após uma tag `v*` e deve receber os segredos do ambiente antes de ser habilitado em produção.

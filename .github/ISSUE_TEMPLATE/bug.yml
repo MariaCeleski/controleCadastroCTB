@@ -1,0 +1,26 @@
+name: Correção de erro
+description: Registre um comportamento diferente do esperado.
+title: "fix: "
+labels: ["type: bug", "status: backlog"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema e impacto
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado e critério de aceite
+    validations:
+      required: true

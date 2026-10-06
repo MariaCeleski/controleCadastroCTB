@@ -1,0 +1,28 @@
+name: Nova funcionalidade
+description: Proponha uma capacidade nova para o produto.
+title: "feat: "
+labels: ["type: feature", "status: backlog"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Objetivo
+      description: Qual problema será resolvido e para quem?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite
+      description: Liste resultados verificáveis.
+      placeholder: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Segurança e impacto em dados
+      description: Informe dados tratados, permissões, auditoria ou diga "não se aplica".
+    validations:
+      required: true
