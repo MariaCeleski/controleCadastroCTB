@@ -15,6 +15,14 @@ export interface CompanySummary {
   stateRegistration?: string;
   updatedAt: string;
 }
+interface CompanyDetail extends Omit<CompanySummary, 'updatedAt'> {
+  credentials: Array<{
+    moduleKey: CompanyFormInput['credentials'][number]['module'];
+    label: string;
+    username: string;
+    password: string;
+  }>;
+}
 
 async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
   const response = await fetch(`${apiUrl}${path}`, {
@@ -53,4 +61,24 @@ export const api = {
       { method: 'POST', body: JSON.stringify(company) },
       token,
     ),
+  getCompany: async (token: string, id: string): Promise<CompanyFormInput> => {
+    const company = await request<CompanyDetail>(`/api/companies/${id}`, {}, token);
+    return {
+      companyName: company.companyName,
+      cnpj: company.cnpj,
+      stateRegistration: company.stateRegistration,
+      credentials: company.credentials.map(({ moduleKey, ...credential }) => ({
+        module: moduleKey,
+        ...credential,
+      })),
+    };
+  },
+  updateCompany: (token: string, id: string, company: CompanyFormInput) =>
+    request<CompanySummary>(
+      `/api/companies/${id}`,
+      { method: 'PUT', body: JSON.stringify(company) },
+      token,
+    ),
+  deleteCompany: (token: string, id: string) =>
+    request<void>(`/api/companies/${id}`, { method: 'DELETE' }, token),
 };

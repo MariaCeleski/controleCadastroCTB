@@ -10,13 +10,16 @@ import {
 import { useEffect, useState } from 'react';
 import { AuthScreen } from './components/AuthScreen';
 import { CompanyForm } from './components/CompanyForm';
+import { CompaniesTable } from './components/CompaniesTable';
 import { KpiCard } from './components/KpiCard';
 import { api, type CompanySummary, type Session } from './services/api';
+import type { CompanyFormInput } from './types/company';
 
 export function App() {
   const [session, setSession] = useState<Session>();
   const [companies, setCompanies] = useState<CompanySummary[]>([]);
   const [search, setSearch] = useState('');
+  const [editing, setEditing] = useState<{ id: string; value: CompanyFormInput }>();
   const loadCompanies = async (token: string, value = '') =>
     setCompanies(await api.searchCompanies(token, value));
   useEffect(() => {
@@ -107,9 +110,29 @@ export function App() {
           />
         </section>
         <CompanyForm
+          value={editing?.value}
           onSave={async (company) => {
-            await api.createCompany(session.accessToken, company);
+            if (editing) await api.updateCompany(session.accessToken, editing.id, company);
+            else await api.createCompany(session.accessToken, company);
+            setEditing(undefined);
             await loadCompanies(session.accessToken, search);
+          }}
+        />
+        <CompaniesTable
+          companies={companies}
+          onEdit={async (company) =>
+            setEditing({
+              id: company.id,
+              value: await api.getCompany(session.accessToken, company.id),
+            })
+          }
+          onDelete={async (company) => {
+            if (
+              window.confirm(`Excluir ${company.companyName}? Esta ação não pode ser desfeita.`)
+            ) {
+              await api.deleteCompany(session.accessToken, company.id);
+              await loadCompanies(session.accessToken, search);
+            }
           }}
         />
       </main>

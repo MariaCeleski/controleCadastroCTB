@@ -1,5 +1,5 @@
 import { Building2, Save, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CredentialCard } from './CredentialCard';
 import type { CompanyFormInput, CredentialModule } from '../types/company';
 import { formatCnpj, isValidCnpj } from '../utils/cnpj';
@@ -18,11 +18,16 @@ const initialForm = (): CompanyFormInput => ({
 });
 
 interface CompanyFormProps {
+  value?: CompanyFormInput;
   onSave: (form: CompanyFormInput) => Promise<void>;
 }
-export function CompanyForm({ onSave }: CompanyFormProps) {
+export function CompanyForm({ value, onSave }: CompanyFormProps) {
   const [form, setForm] = useState<CompanyFormInput>(initialForm);
   const [error, setError] = useState<string>();
+  useEffect(() => {
+    setForm(value ?? initialForm());
+    setError(undefined);
+  }, [value]);
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (form.companyName.trim().length < 3)
@@ -43,7 +48,7 @@ export function CompanyForm({ onSave }: CompanyFormProps) {
           <Building2 size={20} />
         </span>
         <div>
-          <h2>Nova empresa</h2>
+          <h2>{value ? 'Editar empresa' : 'Nova empresa'}</h2>
           <p>Cadastre os dados e as credenciais de acesso.</p>
         </div>
       </div>

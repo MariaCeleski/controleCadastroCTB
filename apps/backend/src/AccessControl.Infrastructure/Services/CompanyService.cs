@@ -29,4 +29,37 @@ public sealed class CompanyService(AccessControlDbContext db, ICredentialCipher 
         if (!string.IsNullOrWhiteSpace(search)) query = query.Where(x => x.CompanyName.Contains(search) || x.CnpjDigits.Contains(search));
         return await query.OrderBy(x => x.CompanyName).Take(50).Select(x => new CompanySummary(x.Id, x.CompanyName, x.CnpjDigits, x.StateRegistration, x.UpdatedAt)).ToListAsync(cancellationToken);
     }
+
+    public async Task<CompanyDetail?> GetAsync(Guid organizationId, Guid companyId, CancellationToken cancellationToken)
+    {
+        var company = await db.Companies.AsNoTracking().SingleOrDefaultAsync(x => x.Id == companyId && x.OrganizationId == organizationId, cancellationToken);
+        if (company is null) return null;
+        var credentials = await db.Credentials.AsNoTracking().Where(x => x.CompanyId == companyId).OrderBy(x => x.ModuleKey).ToListAsync(cancellationToken);
+        return new CompanyDetail(company.Id, company.CompanyName, company.CnpjDigits, company.StateRegistration, credentials.Select(x => new CredentialResponse(x.ModuleKey, x.Label, x.Username, cipher.Decrypt(x.EncryptedPassword))).ToList(), company.UpdatedAt);
+    }
+
+    public async Task<CompanySummary?> UpdateAsync(Guid organizationId, Guid companyId, CreateCompanyRequest request, CancellationToken cancellationToken)
+    {
+        var company = await db.Companies.SingleOrDefaultAsync(x => x.Id == companyId && x.OrganizationId == organizationId, cancellationToken);
+        if (company is null) return null;
+        var cnpj = new string(request.Cnpj.Where(char.IsDigit).ToArray());
+        var duplicate = await db.Companies.AnyAsync(x => x.OrganizationId == organizationId && x.CnpjDigits == cnpj && x.Id != companyId, cancellationToken);
+        if (duplicate) throw new InvalidOperationException("Já existe uma empresa com este CNPJ.");
+        company.Update(request.CompanyName, cnpj, request.StateRegistration);
+        db.Credentials.RemoveRange(db.Credentials.Where(x => x.CompanyId == companyId));
+        var credentials = request.Credentials.Select(x => new AccessCredential(companyId, x.ModuleKey, x.Label, x.Username, cipher.Encrypt(x.Password))).ToList();
+        company.ReplaceCredentials(credentials);
+        db.Credentials.AddRange(credentials);
+        await db.SaveChangesAsync(cancellationToken);
+        return new CompanySummary(company.Id, company.CompanyName, company.CnpjDigits, company.StateRegistration, company.UpdatedAt);
+    }
+
+    public async Task<bool> DeleteAsync(Guid organizationId, Guid companyId, CancellationToken cancellationToken)
+    {
+        var company = await db.Companies.SingleOrDefaultAsync(x => x.Id == companyId && x.OrganizationId == organizationId, cancellationToken);
+        if (company is null) return false;
+        db.Companies.Remove(company);
+        await db.SaveChangesAsync(cancellationToken);
+        return true;
+    }
 }
