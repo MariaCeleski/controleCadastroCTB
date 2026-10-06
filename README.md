@@ -17,6 +17,16 @@ npm install
 npm run dev
 ```
 
+### Aplicativo desktop
+
+Com Rust instalado, execute o cliente desktop em desenvolvimento com:
+
+```bash
+npm run tauri:dev --workspace=@controle-acessos/frontend
+```
+
+O comando `npm run tauri:build --workspace=@controle-acessos/frontend` gera os instaladores nativos. A release por tag executa esse build em runners separados de macOS e Windows; certificados de assinatura devem ser configurados como segredos do GitHub Actions antes da distribuição ao cliente.
+
 ### Backend
 
 Instale o .NET SDK 10 e execute em uma máquina com PostgreSQL configurado:
