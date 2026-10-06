@@ -1,0 +1,4 @@
+root = true
+
+[apps/backend/src/AccessControl.Infrastructure/Persistence/Migrations/*.cs]
+generated_code = true
