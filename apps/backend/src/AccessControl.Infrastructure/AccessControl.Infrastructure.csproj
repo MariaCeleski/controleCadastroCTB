@@ -4,7 +4,11 @@
     <ProjectReference Include="../AccessControl.Domain/AccessControl.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0"><PrivateAssets>all</PrivateAssets></PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12"><PrivateAssets>all</PrivateAssets></PackageReference>
+    <!-- Pin EF Core to one patch level across the solution to avoid assembly conflicts. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.12" />
   </ItemGroup>
 </Project>

@@ -12,9 +12,9 @@ var encryptionKey = builder.Configuration["Security:CredentialEncryptionKey"] ??
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHealthChecks().AddNpgSql(connectionString);
+builder.Services.AddHealthChecks();
 builder.Services.AddDbContext<AccessControlDbContext>(options => options.UseNpgsql(connectionString));
-builder.Services.AddValidatorsFromAssemblyContaining<CreateCompanyRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateCompanyRequest>, CreateCompanyRequestValidator>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddSingleton<ICredentialCipher>(_ => new AesCredentialCipher(encryptionKey));
 builder.Services.AddProblemDetails();
