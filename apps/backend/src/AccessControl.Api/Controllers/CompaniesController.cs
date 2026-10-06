@@ -21,7 +21,7 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
     public async Task<ActionResult<CompanySummary>> Create(CreateCompanyRequest request, CancellationToken cancellationToken)
     {
         var validation = await validator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid) return ValidationProblem(validation.ToDictionary());
+        if (!validation.IsValid) return ValidationProblem(errors: validation.ToDictionary());
         var company = await companies.CreateAsync(DevelopmentOrganizationId, request, cancellationToken);
         return CreatedAtAction(nameof(Search), new { company.Id }, company);
     }
