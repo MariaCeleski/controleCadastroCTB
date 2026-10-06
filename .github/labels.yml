@@ -1,25 +1,25 @@
 # Source-controlled label catalog. Create these once in GitHub using `gh label create`.
-- name: "type: feature"
-  color: "1D76DB"
-  description: "Nova capacidade de produto"
-- name: "type: bug"
-  color: "D73A4A"
-  description: "Comportamento incorreto"
-- name: "type: chore"
-  color: "6E7781"
-  description: "Manutenção técnica ou documentação"
-- name: "area: frontend"
-  color: "5319E7"
-  description: "Aplicativo React/Tauri"
-- name: "area: backend"
-  color: "0E8A16"
-  description: "API e serviços C#"
-- name: "area: security"
-  color: "B60205"
-  description: "Autenticação, autorização ou credenciais"
-- name: "priority: high"
-  color: "FBCA04"
-  description: "Prioridade alta"
-- name: "status: backlog"
-  color: "D4C5F9"
-  description: "Aguardando priorização"
+- name: 'type: feature'
+  color: '1D76DB'
+  description: 'Nova capacidade de produto'
+- name: 'type: bug'
+  color: 'D73A4A'
+  description: 'Comportamento incorreto'
+- name: 'type: chore'
+  color: '6E7781'
+  description: 'Manutenção técnica ou documentação'
+- name: 'area: frontend'
+  color: '5319E7'
+  description: 'Aplicativo React/Tauri'
+- name: 'area: backend'
+  color: '0E8A16'
+  description: 'API e serviços C#'
+- name: 'area: security'
+  color: 'B60205'
+  description: 'Autenticação, autorização ou credenciais'
+- name: 'priority: high'
+  color: 'FBCA04'
+  description: 'Prioridade alta'
+- name: 'status: backlog'
+  color: 'D4C5F9'
+  description: 'Aguardando priorização'

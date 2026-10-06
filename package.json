@@ -2,12 +2,21 @@
   "name": "controle-acessos",
   "private": true,
   "version": "0.1.0",
-  "workspaces": ["apps/frontend"],
+  "workspaces": [
+    "apps/frontend"
+  ],
   "scripts": {
     "dev": "npm run dev --workspace=@controle-acessos/frontend",
     "build": "npm run build --workspace=@controle-acessos/frontend",
     "lint": "npm run lint --workspace=@controle-acessos/frontend",
-    "test": "npm run test --workspace=@controle-acessos/frontend"
+    "test": "npm run test --workspace=@controle-acessos/frontend",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
 }

@@ -12,7 +12,7 @@
    - bloquear push direto e force push;
    - exigir conversas resolvidas;
    - incluir administradores na regra.
-4. Em **Settings → General**, habilitar somente *squash merging* e apagar automaticamente branches mescladas.
+4. Em **Settings → General**, habilitar somente _squash merging_ e apagar automaticamente branches mescladas.
 5. Em **Settings → Secrets and variables → Actions**, cadastrar segredos de deploy e assinatura. Nunca cadastrar esses valores em arquivos do projeto.
 6. Criar o projeto GitHub Projects "Controle de Acessos" com colunas: `Backlog`, `Ready`, `In progress`, `In review`, `Done`.
 

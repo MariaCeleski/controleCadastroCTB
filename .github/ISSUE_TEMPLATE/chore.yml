@@ -1,7 +1,7 @@
 name: Manutenção técnica
 description: Registre débito técnico, documentação, CI/CD ou dependências.
-title: "chore: "
-labels: ["type: chore", "status: backlog"]
+title: 'chore: '
+labels: ['type: chore', 'status: backlog']
 body:
   - type: textarea
     id: goal

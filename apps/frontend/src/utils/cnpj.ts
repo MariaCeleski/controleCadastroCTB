@@ -17,11 +17,14 @@ export function isValidCnpj(value: string): boolean {
   if (digits.length !== 14 || /^(\d)\1+$/.test(digits)) return false;
   const calculate = (length: number) => {
     let factor = length - 7;
-    const sum = digits.slice(0, length).split('').reduce((total, digit) => {
-      const result = total + Number(digit) * factor;
-      factor = factor === 2 ? 9 : factor - 1;
-      return result;
-    }, 0);
+    const sum = digits
+      .slice(0, length)
+      .split('')
+      .reduce((total, digit) => {
+        const result = total + Number(digit) * factor;
+        factor = factor === 2 ? 9 : factor - 1;
+        return result;
+      }, 0);
     const remainder = sum % 11;
     return remainder < 2 ? 0 : 11 - remainder;
   };
