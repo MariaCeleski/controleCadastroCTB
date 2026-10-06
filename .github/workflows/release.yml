@@ -22,8 +22,15 @@ jobs:
           path: publish/api
 
   desktop:
-    # The desktop signing secrets must be configured before enabling distribution.
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            artifact: desktop-macos
+          - os: windows-latest
+            artifact: desktop-windows
+    # Signing is enabled only after the required certificate secrets are configured.
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,8 +38,9 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm run tauri:build --workspace=@controle-acessos/frontend
       - uses: actions/upload-artifact@v4
         with:
-          name: frontend-${{ github.ref_name }}
-          path: apps/frontend/dist
+          name: ${{ matrix.artifact }}-${{ github.ref_name }}
+          path: apps/frontend/src-tauri/target/release/bundle
