@@ -17,6 +17,8 @@ var jwtAudience = builder.Configuration["Security:Jwt:Audience"] ?? throw new In
 var jwtKey = builder.Configuration["Security:Jwt:SigningKey"] ?? throw new InvalidOperationException("JWT signing key is required.");
 
 builder.Services.AddControllers();
+var allowedOrigins = builder.Configuration.GetSection("Client:AllowedOrigins").Get<string[]>() ?? ["http://localhost:5173"];
+builder.Services.AddCors(options => options.AddPolicy("DesktopClient", policy => policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => options.TokenValidationParameters = new()
 {
     ValidateIssuer = true, ValidIssuer = jwtIssuer, ValidateAudience = true, ValidAudience = jwtAudience,
@@ -41,6 +43,7 @@ builder.Services.AddProblemDetails();
 var app = builder.Build();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors("DesktopClient");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();
