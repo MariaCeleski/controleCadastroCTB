@@ -1,4 +1,5 @@
 using AccessControl.Application.Companies;
+using AccessControl.Application.Auditing;
 using AccessControl.Application.Security;
 using AccessControl.Application.Users;
 using AccessControl.Infrastructure.Persistence;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AccessControl") ?? throw new InvalidOperationException("Connection string 'AccessControl' is required.");
@@ -17,7 +19,8 @@ var jwtIssuer = builder.Configuration["Security:Jwt:Issuer"] ?? throw new Invali
 var jwtAudience = builder.Configuration["Security:Jwt:Audience"] ?? throw new InvalidOperationException("JWT audience is required.");
 var jwtKey = builder.Configuration["Security:Jwt:SigningKey"] ?? throw new InvalidOperationException("JWT signing key is required.");
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 var allowedOrigins = builder.Configuration.GetSection("Client:AllowedOrigins").Get<string[]>() ?? ["http://localhost:5173"];
 builder.Services.AddCors(options => options.AddPolicy("DesktopClient", policy => policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => options.TokenValidationParameters = new()
@@ -36,6 +39,7 @@ builder.Services.AddScoped<IValidator<RegisterOrganizationRequest>, RegisterOrga
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddScoped<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IAuditEventService, AuditEventService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();

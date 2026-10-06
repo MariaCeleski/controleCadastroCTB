@@ -7,6 +7,7 @@ public sealed class AccessControlDbContext(DbContextOptions<AccessControlDbConte
 {
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<AccessCredential> Credentials => Set<AccessCredential>();
+    public DbSet<AuditEvent> AuditEvents => Set<AuditEvent>();
     public DbSet<Organization> Organizations => Set<Organization>();
     public DbSet<User> Users => Set<User>();
 
@@ -41,6 +42,13 @@ public sealed class AccessControlDbContext(DbContextOptions<AccessControlDbConte
             entity.ToTable("access_credentials");
             entity.HasKey(x => x.Id);
             entity.Property(x => x.EncryptedPassword).IsRequired();
+        });
+        modelBuilder.Entity<AuditEvent>(entity =>
+        {
+            entity.ToTable("audit_events");
+            entity.Property(x => x.Action).HasConversion<string>().HasMaxLength(50).IsRequired();
+            entity.Property(x => x.EntityType).HasMaxLength(80).IsRequired();
+            entity.HasIndex(x => new { x.OrganizationId, x.OccurredAt });
         });
     }
 }

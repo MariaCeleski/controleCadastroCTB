@@ -22,6 +22,22 @@ export interface ManagedUser {
   role: 'Administrator' | 'Operator';
   isActive: boolean;
 }
+export interface AuditEvent {
+  id: string;
+  actorUserId?: string;
+  action:
+    | 'OrganizationRegistered'
+    | 'UserAuthenticated'
+    | 'CompanyCreated'
+    | 'CompanyCredentialsViewed'
+    | 'CompanyUpdated'
+    | 'CompanyDeleted'
+    | 'UserCreated'
+    | 'UserActivationChanged';
+  entityType: string;
+  entityId?: string;
+  occurredAt: string;
+}
 interface CompanyDetail extends Omit<CompanySummary, 'updatedAt'> {
   credentials: Array<{
     moduleKey: CompanyFormInput['credentials'][number]['module'];
@@ -97,4 +113,5 @@ export const api = {
       { method: 'PATCH', body: JSON.stringify(isActive) },
       token,
     ),
+  listAuditEvents: (token: string) => request<AuditEvent[]>('/api/audit-events', {}, token),
 };
