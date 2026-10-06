@@ -50,3 +50,10 @@ dotnet user-secrets set "Security:Jwt:SigningKey" "<segredo-com-32-ou-mais-carac
 ## Qualidade e entrega
 
 O workflow de CI executa lint, testes e build a cada pull request. O workflow de release só publica artefatos após uma tag `v*` e deve receber os segredos do ambiente antes de ser habilitado em produção.
+
+## Implantação
+
+- [Implantação da API, migrations e backup](docs/deployment.md)
+- [Instalação do aplicativo no Windows e macOS](docs/desktop-installation.md)
+
+As migrations não são aplicadas no início normal da API. O processo de implantação habilita `Database__ApplyMigrations` somente em uma execução isolada e encerra-a após a atualização do banco.

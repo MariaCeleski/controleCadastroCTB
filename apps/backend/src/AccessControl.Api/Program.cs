@@ -48,6 +48,17 @@ builder.Services.AddSingleton<ICredentialCipher>(_ => new AesCredentialCipher(en
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+if (builder.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+{
+    // This is enabled only by the single deployment migration job; regular API instances never alter the schema on startup.
+    await using var scope = app.Services.CreateAsyncScope();
+    var db = scope.ServiceProvider.GetRequiredService<AccessControlDbContext>();
+    await db.Database.MigrateAsync();
+    if (builder.Configuration.GetValue<bool>("Database:ExitAfterMigrations"))
+    {
+        return;
+    }
+}
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseCors("DesktopClient");
