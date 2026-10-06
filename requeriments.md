@@ -89,12 +89,12 @@ No banco, a senha de uma credencial existe apenas como `encryptedPassword`. Senh
 
 Cada empresa terá quatro módulos predefinidos no MVP:
 
-| Chave | Rótulo padrão |
-| --- | --- |
-| `erp` | Sistema principal / ERP |
-| `fiscal` | Portal fiscal / SEFAZ / prefeitura |
-| `financial` | Internet banking / financeiro |
-| `administrative` | Painel administrativo / diversos |
+| Chave            | Rótulo padrão                      |
+| ---------------- | ---------------------------------- |
+| `erp`            | Sistema principal / ERP            |
+| `fiscal`         | Portal fiscal / SEFAZ / prefeitura |
+| `financial`      | Internet banking / financeiro      |
+| `administrative` | Painel administrativo / diversos   |
 
 Cada módulo possui rótulo, usuário e senha. Os quatro módulos existem na estrutura, mas usuário e senha podem permanecer vazios enquanto o acesso não estiver disponível. Rótulos e quantidade configuráveis são evolução futura.
 

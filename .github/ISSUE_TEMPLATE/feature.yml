@@ -1,7 +1,7 @@
 name: Nova funcionalidade
 description: Proponha uma capacidade nova para o produto.
-title: "feat: "
-labels: ["type: feature", "status: backlog"]
+title: 'feat: '
+labels: ['type: feature', 'status: backlog']
 body:
   - type: textarea
     id: problem

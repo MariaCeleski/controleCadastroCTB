@@ -1,7 +1,88 @@
-import { Bell, Building2, KeyRound, LayoutDashboard, Search, ShieldCheck, Users } from 'lucide-react';
+import {
+  Bell,
+  Building2,
+  KeyRound,
+  LayoutDashboard,
+  Search,
+  ShieldCheck,
+  Users,
+} from 'lucide-react';
 import { CompanyForm } from './components/CompanyForm';
 import { KpiCard } from './components/KpiCard';
 
 export function App() {
-  return <div className="app-shell"><aside className="sidebar"><div className="brand"><span><ShieldCheck size={22}/></span><strong>Access<span>Control</span></strong></div><nav><a className="active" href="#dashboard"><LayoutDashboard size={19}/> Visão geral</a><a href="#companies"><Building2 size={19}/> Empresas</a><a href="#credentials"><KeyRound size={19}/> Credenciais</a><a href="#users"><Users size={19}/> Usuários</a></nav><div className="sidebar-user"><span>MC</span><div><strong>Maria Celeski</strong><small>Administradora</small></div></div></aside><main><header className="topbar"><div><p>Olá, Maria</p><h1>Controle de acessos</h1></div><div className="topbar-actions"><label className="search"><Search size={18}/><input placeholder="Buscar empresa ou CNPJ" /></label><button className="notification" aria-label="Notificações"><Bell size={19}/><i /></button></div></header><section className="kpi-grid"><KpiCard label="Empresas cadastradas" value="248" trend="+12 neste mês" icon={<Building2 size={21}/>} /><KpiCard label="Credenciais ativas" value="836" trend="Em 248 empresas" icon={<KeyRound size={21}/>} /><KpiCard label="Acessos protegidos" value="100%" trend="Dados criptografados" icon={<ShieldCheck size={21}/>} /></section><CompanyForm /></main></div>;
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <span>
+            <ShieldCheck size={22} />
+          </span>
+          <strong>
+            Access<span>Control</span>
+          </strong>
+        </div>
+        <nav>
+          <a className="active" href="#dashboard">
+            <LayoutDashboard size={19} /> Visão geral
+          </a>
+          <a href="#companies">
+            <Building2 size={19} /> Empresas
+          </a>
+          <a href="#credentials">
+            <KeyRound size={19} /> Credenciais
+          </a>
+          <a href="#users">
+            <Users size={19} /> Usuários
+          </a>
+        </nav>
+        <div className="sidebar-user">
+          <span>MC</span>
+          <div>
+            <strong>Maria Celeski</strong>
+            <small>Administradora</small>
+          </div>
+        </div>
+      </aside>
+      <main>
+        <header className="topbar">
+          <div>
+            <p>Olá, Maria</p>
+            <h1>Controle de acessos</h1>
+          </div>
+          <div className="topbar-actions">
+            <label className="search">
+              <Search size={18} />
+              <input placeholder="Buscar empresa ou CNPJ" />
+            </label>
+            <button className="notification" aria-label="Notificações">
+              <Bell size={19} />
+              <i />
+            </button>
+          </div>
+        </header>
+        <section className="kpi-grid">
+          <KpiCard
+            label="Empresas cadastradas"
+            value="248"
+            trend="+12 neste mês"
+            icon={<Building2 size={21} />}
+          />
+          <KpiCard
+            label="Credenciais ativas"
+            value="836"
+            trend="Em 248 empresas"
+            icon={<KeyRound size={21} />}
+          />
+          <KpiCard
+            label="Acessos protegidos"
+            value="100%"
+            trend="Dados criptografados"
+            icon={<ShieldCheck size={21} />}
+          />
+        </section>
+        <CompanyForm />
+      </main>
+    </div>
+  );
 }
