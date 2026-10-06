@@ -2,6 +2,7 @@ using AccessControl.Application.Companies;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AccessControl.Api.Controllers;
 
@@ -12,6 +13,7 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
 {
     // The tenant boundary is a signed JWT claim; client-provided organization IDs would allow impersonation.
     private Guid OrganizationId => Guid.Parse(User.FindFirst("organization_id")?.Value ?? throw new UnauthorizedAccessException());
+    private Guid ActorUserId => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException());
 
     [HttpGet]
     [ProducesResponseType<IReadOnlyCollection<CompanySummary>>(StatusCodes.Status200OK)]
@@ -22,7 +24,7 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CompanyDetail>> Get(Guid companyId, CancellationToken cancellationToken)
     {
-        var company = await companies.GetAsync(OrganizationId, companyId, cancellationToken);
+        var company = await companies.GetAsync(OrganizationId, ActorUserId, companyId, cancellationToken);
         return company is null ? NotFound() : Ok(company);
     }
 
@@ -36,7 +38,7 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
         {
             return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
         }
-        var company = await companies.CreateAsync(OrganizationId, request, cancellationToken);
+        var company = await companies.CreateAsync(OrganizationId, ActorUserId, request, cancellationToken);
         return CreatedAtAction(nameof(Search), new { company.Id }, company);
     }
 
@@ -46,12 +48,12 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
     {
         var validation = await validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid) return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
-        var company = await companies.UpdateAsync(OrganizationId, companyId, request, cancellationToken);
+        var company = await companies.UpdateAsync(OrganizationId, ActorUserId, companyId, request, cancellationToken);
         return company is null ? NotFound() : Ok(company);
     }
 
     [HttpDelete("{companyId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(Guid companyId, CancellationToken cancellationToken) => await companies.DeleteAsync(OrganizationId, companyId, cancellationToken) ? NoContent() : NotFound();
+    public async Task<IActionResult> Delete(Guid companyId, CancellationToken cancellationToken) => await companies.DeleteAsync(OrganizationId, ActorUserId, companyId, cancellationToken) ? NoContent() : NotFound();
 }

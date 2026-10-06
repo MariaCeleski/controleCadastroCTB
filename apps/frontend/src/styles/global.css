@@ -338,6 +338,51 @@ main {
   color: #b42318;
   font-size: 13px;
 }
+.audit-card {
+  margin-top: 24px;
+}
+.audit-title {
+  margin-bottom: 16px;
+}
+.audit-title .icon-button {
+  margin-left: auto;
+}
+.audit-list {
+  display: grid;
+}
+.audit-row {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 0;
+  border-top: 1px solid #eaecf0;
+}
+.audit-marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #12b76a;
+}
+.audit-row strong,
+.audit-row p,
+.audit-row time,
+.empty-state {
+  margin: 0;
+  font-size: 13px;
+}
+.audit-row strong {
+  color: #344054;
+}
+.audit-row p,
+.audit-row time,
+.empty-state {
+  color: #667085;
+}
+.audit-row p {
+  margin-top: 3px;
+  font-size: 12px;
+}
 @media (max-width: 900px) {
   .sidebar {
     width: 70px;

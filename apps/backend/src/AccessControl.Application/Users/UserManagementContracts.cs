@@ -8,6 +8,6 @@ public sealed record UserSummary(Guid Id, string Name, string Email, UserRole Ro
 public interface IUserManagementService
 {
     Task<IReadOnlyCollection<UserSummary>> ListAsync(Guid organizationId, CancellationToken cancellationToken);
-    Task<UserSummary> CreateAsync(Guid organizationId, CreateUserRequest request, CancellationToken cancellationToken);
-    Task<bool> SetActiveAsync(Guid organizationId, Guid userId, bool isActive, CancellationToken cancellationToken);
+    Task<UserSummary> CreateAsync(Guid organizationId, Guid actorUserId, CreateUserRequest request, CancellationToken cancellationToken);
+    Task<bool> SetActiveAsync(Guid organizationId, Guid actorUserId, Guid userId, bool isActive, CancellationToken cancellationToken);
 }

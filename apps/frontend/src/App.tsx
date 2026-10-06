@@ -1,6 +1,7 @@
 import {
   Bell,
   Building2,
+  ClipboardList,
   KeyRound,
   LayoutDashboard,
   Search,
@@ -9,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AuthScreen } from './components/AuthScreen';
+import { AuditTrail } from './components/AuditTrail';
 import { CompanyForm } from './components/CompanyForm';
 import { CompaniesTable } from './components/CompaniesTable';
 import { KpiCard } from './components/KpiCard';
@@ -60,6 +62,11 @@ export function App() {
           <a href="#users">
             <Users size={19} /> Usuários
           </a>
+          {session.role === 'Administrator' && (
+            <a href="#audit">
+              <ClipboardList size={19} /> Auditoria
+            </a>
+          )}
         </nav>
         <div className="sidebar-user">
           <span>MC</span>
@@ -137,6 +144,7 @@ export function App() {
           }}
         />
         {session.role === 'Administrator' && <UserManagement token={session.accessToken} />}
+        {session.role === 'Administrator' && <AuditTrail token={session.accessToken} />}
       </main>
     </div>
   );
