@@ -10,6 +10,7 @@ namespace AccessControl.Api.Controllers;
 [Authorize]
 public sealed class CompaniesController(ICompanyService companies, IValidator<CreateCompanyRequest> validator) : ControllerBase
 {
+    // The tenant boundary is a signed JWT claim; client-provided organization IDs would allow impersonation.
     private Guid OrganizationId => Guid.Parse(User.FindFirst("organization_id")?.Value ?? throw new UnauthorizedAccessException());
 
     [HttpGet]

@@ -12,6 +12,7 @@ export function CredentialCard({ credential, onChange }: CredentialCardProps) {
   const update = (field: keyof CredentialInput, value: string) =>
     onChange({ ...credential, [field]: value });
   const copyUsername = async () => {
+    // Password copying will be permissioned and audited by the API; this prototype only copies the username.
     if (credential.username) await navigator.clipboard.writeText(credential.username);
   };
   return (

@@ -30,6 +30,7 @@ public sealed class AccessControlDbContext(DbContextOptions<AccessControlDbConte
             entity.HasKey(x => x.Id);
             entity.Property(x => x.CompanyName).HasMaxLength(200).IsRequired();
             entity.Property(x => x.CnpjDigits).HasMaxLength(14).IsRequired();
+            // A CNPJ is unique only inside the current customer organization, never globally across clients.
             entity.HasIndex(x => new { x.OrganizationId, x.CnpjDigits }).IsUnique();
             // Credentials are persisted explicitly by the service; do not let EF infer a second relationship from the read-only domain collection.
             entity.Ignore(x => x.Credentials);

@@ -10,6 +10,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AccessControl") ?? throw new InvalidOperationException("Connection string 'AccessControl' is required.");
+// Runtime secrets come from User Secrets locally and the secret manager in deployed environments, never source control.
 var encryptionKey = builder.Configuration["Security:CredentialEncryptionKey"] ?? throw new InvalidOperationException("Credential encryption key is required.");
 var jwtIssuer = builder.Configuration["Security:Jwt:Issuer"] ?? throw new InvalidOperationException("JWT issuer is required.");
 var jwtAudience = builder.Configuration["Security:Jwt:Audience"] ?? throw new InvalidOperationException("JWT audience is required.");

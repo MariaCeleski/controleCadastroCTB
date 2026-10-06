@@ -4,6 +4,7 @@ export function onlyDigits(value: string): string {
 }
 
 export function formatCnpj(value: string): string {
+  // The API stores only digits; this mask exists solely to help people read and type the value.
   const digits = onlyDigits(value).slice(0, 14);
   return digits
     .replace(/^(\d{2})(\d)/, '$1.$2')
@@ -15,6 +16,7 @@ export function formatCnpj(value: string): string {
 export function isValidCnpj(value: string): boolean {
   const digits = onlyDigits(value);
   if (digits.length !== 14 || /^(\d)\1+$/.test(digits)) return false;
+  // Both check digits are derived from the preceding digits according to Brazil's CNPJ algorithm.
   const calculate = (length: number) => {
     let factor = length - 7;
     const sum = digits
