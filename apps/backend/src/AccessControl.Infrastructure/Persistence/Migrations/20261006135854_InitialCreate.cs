@@ -67,8 +67,7 @@ namespace AccessControl.Infrastructure.Persistence.Migrations
                     ModuleKey = table.Column<string>(type: "text", nullable: false),
                     Label = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
-                    EncryptedPassword = table.Column<string>(type: "text", nullable: false),
-                    CompanyId1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    EncryptedPassword = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,22 +78,12 @@ namespace AccessControl.Infrastructure.Persistence.Migrations
                         principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_access_credentials_companies_CompanyId1",
-                        column: x => x.CompanyId1,
-                        principalTable: "companies",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_access_credentials_CompanyId",
                 table: "access_credentials",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_access_credentials_CompanyId1",
-                table: "access_credentials",
-                column: "CompanyId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_companies_OrganizationId_CnpjDigits",

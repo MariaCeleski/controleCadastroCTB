@@ -31,9 +31,6 @@ namespace AccessControl.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CompanyId1")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("EncryptedPassword")
                         .IsRequired()
                         .HasColumnType("text");
@@ -53,8 +50,6 @@ namespace AccessControl.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1");
 
                     b.ToTable("access_credentials", (string)null);
                 });
@@ -157,15 +152,6 @@ namespace AccessControl.Infrastructure.Persistence.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AccessControl.Domain.Entities.Company", null)
-                        .WithMany("Credentials")
-                        .HasForeignKey("CompanyId1");
-                });
-
-            modelBuilder.Entity("AccessControl.Domain.Entities.Company", b =>
-                {
-                    b.Navigation("Credentials");
                 });
 #pragma warning restore 612, 618
         }

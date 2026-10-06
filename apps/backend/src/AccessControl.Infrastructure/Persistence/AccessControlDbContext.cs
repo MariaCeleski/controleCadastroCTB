@@ -31,6 +31,8 @@ public sealed class AccessControlDbContext(DbContextOptions<AccessControlDbConte
             entity.Property(x => x.CompanyName).HasMaxLength(200).IsRequired();
             entity.Property(x => x.CnpjDigits).HasMaxLength(14).IsRequired();
             entity.HasIndex(x => new { x.OrganizationId, x.CnpjDigits }).IsUnique();
+            // Credentials are persisted explicitly by the service; do not let EF infer a second relationship from the read-only domain collection.
+            entity.Ignore(x => x.Credentials);
             entity.HasMany<AccessCredential>().WithOne().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
         });
         modelBuilder.Entity<AccessCredential>(entity =>

@@ -16,6 +16,7 @@ public sealed class CompanyService(AccessControlDbContext db, ICredentialCipher 
         var company = new Company(organizationId, request.CompanyName, cnpj, request.StateRegistration);
         company.ReplaceCredentials(request.Credentials.Select(x => new AccessCredential(company.Id, x.ModuleKey, x.Label, x.Username, cipher.Encrypt(x.Password))));
         db.Companies.Add(company);
+        db.Credentials.AddRange(company.Credentials);
         await db.SaveChangesAsync(cancellationToken);
         return new CompanySummary(company.Id, company.CompanyName, company.CnpjDigits, company.StateRegistration, company.UpdatedAt);
     }
