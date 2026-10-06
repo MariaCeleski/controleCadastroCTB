@@ -7,9 +7,23 @@ public sealed class AccessControlDbContext(DbContextOptions<AccessControlDbConte
 {
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<AccessCredential> Credentials => Set<AccessCredential>();
+    public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Organization>(entity =>
+        {
+            entity.ToTable("organizations");
+            entity.Property(x => x.Name).HasMaxLength(150).IsRequired();
+        });
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("users");
+            entity.Property(x => x.Email).HasMaxLength(254).IsRequired();
+            entity.Property(x => x.PasswordHash).IsRequired();
+            entity.HasIndex(x => x.Email).IsUnique();
+        });
         modelBuilder.Entity<Company>(entity =>
         {
             entity.ToTable("companies");

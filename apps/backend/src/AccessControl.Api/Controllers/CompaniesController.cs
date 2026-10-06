@@ -1,19 +1,20 @@
 using AccessControl.Application.Companies;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccessControl.Api.Controllers;
 
 [ApiController]
 [Route("api/companies")]
+[Authorize]
 public sealed class CompaniesController(ICompanyService companies, IValidator<CreateCompanyRequest> validator) : ControllerBase
 {
-    // Authentication will supply this organization claim. A header is deliberately not accepted in production.
-    private static readonly Guid DevelopmentOrganizationId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+    private Guid OrganizationId => Guid.Parse(User.FindFirst("organization_id")?.Value ?? throw new UnauthorizedAccessException());
 
     [HttpGet]
     [ProducesResponseType<IReadOnlyCollection<CompanySummary>>(StatusCodes.Status200OK)]
-    public Task<IReadOnlyCollection<CompanySummary>> Search([FromQuery] string? search, CancellationToken cancellationToken) => companies.SearchAsync(DevelopmentOrganizationId, search, cancellationToken);
+    public Task<IReadOnlyCollection<CompanySummary>> Search([FromQuery] string? search, CancellationToken cancellationToken) => companies.SearchAsync(OrganizationId, search, cancellationToken);
 
     [HttpPost]
     [ProducesResponseType<CompanySummary>(StatusCodes.Status201Created)]
@@ -25,7 +26,7 @@ public sealed class CompaniesController(ICompanyService companies, IValidator<Cr
         {
             return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
         }
-        var company = await companies.CreateAsync(DevelopmentOrganizationId, request, cancellationToken);
+        var company = await companies.CreateAsync(OrganizationId, request, cancellationToken);
         return CreatedAtAction(nameof(Search), new { company.Id }, company);
     }
 }
