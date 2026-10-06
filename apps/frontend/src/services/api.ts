@@ -15,6 +15,13 @@ export interface CompanySummary {
   stateRegistration?: string;
   updatedAt: string;
 }
+export interface ManagedUser {
+  id: string;
+  name: string;
+  email: string;
+  role: 'Administrator' | 'Operator';
+  isActive: boolean;
+}
 interface CompanyDetail extends Omit<CompanySummary, 'updatedAt'> {
   credentials: Array<{
     moduleKey: CompanyFormInput['credentials'][number]['module'];
@@ -81,4 +88,13 @@ export const api = {
     ),
   deleteCompany: (token: string, id: string) =>
     request<void>(`/api/companies/${id}`, { method: 'DELETE' }, token),
+  listUsers: (token: string) => request<ManagedUser[]>('/api/users', {}, token),
+  createUser: (token: string, user: Omit<ManagedUser, 'id' | 'isActive'> & { password: string }) =>
+    request<ManagedUser>('/api/users', { method: 'POST', body: JSON.stringify(user) }, token),
+  setUserActive: (token: string, id: string, isActive: boolean) =>
+    request<void>(
+      `/api/users/${id}/active`,
+      { method: 'PATCH', body: JSON.stringify(isActive) },
+      token,
+    ),
 };

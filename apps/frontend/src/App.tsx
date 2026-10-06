@@ -12,6 +12,7 @@ import { AuthScreen } from './components/AuthScreen';
 import { CompanyForm } from './components/CompanyForm';
 import { CompaniesTable } from './components/CompaniesTable';
 import { KpiCard } from './components/KpiCard';
+import { UserManagement } from './components/UserManagement';
 import { api, type CompanySummary, type Session } from './services/api';
 import type { CompanyFormInput } from './types/company';
 
@@ -135,6 +136,7 @@ export function App() {
             }
           }}
         />
+        {session.role === 'Administrator' && <UserManagement token={session.accessToken} />}
       </main>
     </div>
   );

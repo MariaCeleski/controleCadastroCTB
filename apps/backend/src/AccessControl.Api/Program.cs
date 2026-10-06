@@ -1,5 +1,6 @@
 using AccessControl.Application.Companies;
 using AccessControl.Application.Security;
+using AccessControl.Application.Users;
 using AccessControl.Infrastructure.Persistence;
 using AccessControl.Infrastructure.Services;
 using FluentValidation;
@@ -33,8 +34,10 @@ builder.Services.AddDbContext<AccessControlDbContext>(options => options.UseNpgs
 builder.Services.AddScoped<IValidator<CreateCompanyRequest>, CreateCompanyRequestValidator>();
 builder.Services.AddScoped<IValidator<RegisterOrganizationRequest>, RegisterOrganizationRequestValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<ITokenService>(_ => new JwtTokenService(jwtIssuer, jwtAudience, jwtKey));
 builder.Services.AddSingleton<ICredentialCipher>(_ => new AesCredentialCipher(encryptionKey));

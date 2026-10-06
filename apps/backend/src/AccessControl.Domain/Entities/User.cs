@@ -20,4 +20,6 @@ public sealed class User : Entity
         PasswordHash = passwordHash;
         Role = role;
     }
+
+    public void SetActive(bool isActive) => IsActive = isActive;
 }
