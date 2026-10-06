@@ -1,0 +1,56 @@
+import type { CompanyFormInput } from '../types/company';
+
+const apiUrl = import.meta.env.VITE_API_URL ?? 'https://localhost:5001';
+
+export interface Session {
+  accessToken: string;
+  userName: string;
+  role: string;
+  expiresAt: string;
+}
+export interface CompanySummary {
+  id: string;
+  companyName: string;
+  cnpj: string;
+  stateRegistration?: string;
+  updatedAt: string;
+}
+
+async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+  const response = await fetch(`${apiUrl}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+  if (!response.ok)
+    throw new Error(
+      response.status === 401
+        ? 'Sua sessão expirou. Faça login novamente.'
+        : 'Não foi possível concluir a operação.',
+    );
+  return response.status === 204 ? (undefined as T) : (response.json() as Promise<T>);
+}
+
+export const api = {
+  login: (email: string, password: string) =>
+    request<Session>('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+  register: (organizationName: string, name: string, email: string, password: string) =>
+    request<void>('/api/auth/register-organization', {
+      method: 'POST',
+      body: JSON.stringify({ organizationName, name, email, password }),
+    }),
+  searchCompanies: (token: string, search = '') =>
+    request<CompanySummary[]>(`/api/companies?search=${encodeURIComponent(search)}`, {}, token),
+  createCompany: (token: string, company: CompanyFormInput) =>
+    request<CompanySummary>(
+      '/api/companies',
+      { method: 'POST', body: JSON.stringify(company) },
+      token,
+    ),
+};

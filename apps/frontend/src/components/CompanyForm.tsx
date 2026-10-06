@@ -17,16 +17,24 @@ const initialForm = (): CompanyFormInput => ({
   credentials: modules.map(([module, label]) => ({ module, label, username: '', password: '' })),
 });
 
-export function CompanyForm() {
+interface CompanyFormProps {
+  onSave: (form: CompanyFormInput) => Promise<void>;
+}
+export function CompanyForm({ onSave }: CompanyFormProps) {
   const [form, setForm] = useState<CompanyFormInput>(initialForm);
   const [error, setError] = useState<string>();
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (form.companyName.trim().length < 3)
       return setError('Informe uma razão social com pelo menos 3 caracteres.');
     if (!isValidCnpj(form.cnpj)) return setError('Informe um CNPJ válido.');
-    setError(undefined);
-    // The API integration replaces this temporary client-side success path; validation remains for immediate feedback.
+    try {
+      await onSave(form);
+      setForm(initialForm());
+      setError(undefined);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'Não foi possível salvar a empresa.');
+    }
   };
   return (
     <form className="content-card" onSubmit={submit}>
