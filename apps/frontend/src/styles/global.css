@@ -450,6 +450,95 @@ main {
   color: #b42318;
   font-size: 13px;
 }
+.records-card {
+  margin-top: 24px;
+}
+.records-table {
+  overflow-x: auto;
+}
+.records-head,
+.records-row {
+  display: grid;
+  align-items: center;
+  column-gap: 20px;
+  min-width: 720px;
+}
+.records-head {
+  padding: 0 16px 11px;
+  color: #667085;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.records-row {
+  min-height: 63px;
+  padding: 12px 16px;
+  border-top: 1px solid #eaecf0;
+  color: #475467;
+  font-size: 13px;
+}
+.records-row strong {
+  overflow: hidden;
+  color: #101828;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.records-row > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.company-records .records-head,
+.company-records .records-row {
+  grid-template-columns:
+    minmax(110px, 0.7fr) minmax(220px, 2fr) minmax(150px, 1.2fr) minmax(110px, 1fr)
+    88px;
+  min-width: 820px;
+}
+.users-form {
+  grid-template-columns:
+    minmax(160px, 1fr) minmax(240px, 1.8fr) minmax(180px, 1.2fr) minmax(125px, 0.7fr)
+    auto;
+  align-items: end;
+}
+.users-form select {
+  display: block;
+  width: 100%;
+  min-height: 39px;
+  margin-top: 7px;
+  padding: 9px 11px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  color: #101828;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  outline-color: #1570ef;
+}
+.users-form .primary {
+  min-height: 39px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.users-records .records-head,
+.users-records .records-row {
+  grid-template-columns: minmax(150px, 1fr) minmax(230px, 1.7fr) minmax(130px, 0.8fr) 110px;
+}
+.users-records .secondary {
+  min-width: 82px;
+  padding: 8px 11px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .audit-card {
   margin-top: 24px;
 }
@@ -516,6 +605,9 @@ main {
   .fields-grid,
   .credentials-grid {
     grid-template-columns: 1fr;
+  }
+  .users-form .primary {
+    width: 100%;
   }
   main {
     padding: 25px 20px;

@@ -57,7 +57,13 @@ export function UserManagement({ token }: { token: string }) {
         </button>
       </form>
       {error && <p className="form-error">{error}</p>}
-      <div className="records-table">
+      <div className="records-table users-records">
+        <div className="records-head">
+          <span>Nome</span>
+          <span>E-mail</span>
+          <span>Perfil</span>
+          <span>Ações</span>
+        </div>
         {users.map((user) => (
           <div className="records-row" key={user.id}>
             <strong>{user.name}</strong>
