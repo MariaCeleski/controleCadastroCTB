@@ -12,6 +12,7 @@ export interface Session {
 export interface CompanySummary {
   id: string;
   companyName: string;
+  registrationNumber: string;
   cnpj: string;
   stateRegistration?: string;
   updatedAt: string;
@@ -96,6 +97,7 @@ export const api = {
     const company = await request<CompanyDetail>(`/api/companies/${id}`, {}, token);
     return {
       companyName: company.companyName,
+      registrationNumber: company.registrationNumber,
       cnpj: company.cnpj,
       stateRegistration: company.stateRegistration,
       credentials: company.credentials.map(({ moduleKey, ...credential }) => ({

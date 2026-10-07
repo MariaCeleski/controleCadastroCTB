@@ -1,10 +1,10 @@
 namespace AccessControl.Application.Companies;
 
 public sealed record CredentialRequest(string ModuleKey, string Label, string Username, string Password);
-public sealed record CreateCompanyRequest(string CompanyName, string Cnpj, string? StateRegistration, IReadOnlyCollection<CredentialRequest> Credentials);
-public sealed record CompanySummary(Guid Id, string CompanyName, string Cnpj, string? StateRegistration, DateTimeOffset UpdatedAt);
+public sealed record CreateCompanyRequest(string CompanyName, string RegistrationNumber, string Cnpj, string? StateRegistration, IReadOnlyCollection<CredentialRequest> Credentials);
+public sealed record CompanySummary(Guid Id, string CompanyName, string RegistrationNumber, string Cnpj, string? StateRegistration, DateTimeOffset UpdatedAt);
 public sealed record CredentialResponse(string ModuleKey, string Label, string Username, string Password);
-public sealed record CompanyDetail(Guid Id, string CompanyName, string Cnpj, string? StateRegistration, IReadOnlyCollection<CredentialResponse> Credentials, DateTimeOffset UpdatedAt);
+public sealed record CompanyDetail(Guid Id, string CompanyName, string RegistrationNumber, string Cnpj, string? StateRegistration, IReadOnlyCollection<CredentialResponse> Credentials, DateTimeOffset UpdatedAt);
 
 public interface ICompanyService
 {

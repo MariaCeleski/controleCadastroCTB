@@ -5,6 +5,7 @@ public sealed class Company : Entity
     private readonly List<AccessCredential> _credentials = [];
 
     public Guid OrganizationId { get; private set; }
+    public string RegistrationNumber { get; private set; } = string.Empty;
     public string CompanyName { get; private set; } = string.Empty;
     public string CnpjDigits { get; private set; } = string.Empty;
     public string? StateRegistration { get; private set; }
@@ -14,14 +15,15 @@ public sealed class Company : Entity
 
     private Company() { }
 
-    public Company(Guid organizationId, string companyName, string cnpjDigits, string? stateRegistration)
+    public Company(Guid organizationId, string registrationNumber, string companyName, string cnpjDigits, string? stateRegistration)
     {
         OrganizationId = organizationId;
-        Update(companyName, cnpjDigits, stateRegistration);
+        Update(registrationNumber, companyName, cnpjDigits, stateRegistration);
     }
 
-    public void Update(string companyName, string cnpjDigits, string? stateRegistration)
+    public void Update(string registrationNumber, string companyName, string cnpjDigits, string? stateRegistration)
     {
+        RegistrationNumber = registrationNumber.Trim();
         CompanyName = companyName.Trim();
         CnpjDigits = cnpjDigits;
         StateRegistration = string.IsNullOrWhiteSpace(stateRegistration) ? null : stateRegistration.Trim();

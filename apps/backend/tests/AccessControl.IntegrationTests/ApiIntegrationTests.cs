@@ -55,6 +55,20 @@ public sealed class ApiIntegrationTests(AccessControlApiFactory factory) : IAsyn
         Assert.DoesNotContain("senha-secreta-de-teste", payload, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task SearchByRegistrationNumberReturnsCompany()
+    {
+        var client = await RegisterAndAuthenticateAsync("Organização de Busca", "admin-busca@exemplo.com");
+        await CreateCompanyAsync(client, "Empresa Pesquisável", "11222333000181", "000123");
+
+        var response = await client.GetAsync("/api/companies?search=000123");
+        var payload = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("Empresa Pesquisável", payload, StringComparison.Ordinal);
+        Assert.Contains("000123", payload, StringComparison.Ordinal);
+    }
+
     private async Task<HttpClient> RegisterAndAuthenticateAsync(string organizationName, string email)
     {
         var client = factory.CreateClient();
@@ -76,11 +90,12 @@ public sealed class ApiIntegrationTests(AccessControlApiFactory factory) : IAsyn
         return client;
     }
 
-    private static async Task<CompanyResponse> CreateCompanyAsync(HttpClient client, string companyName, string cnpj)
+    private static async Task<CompanyResponse> CreateCompanyAsync(HttpClient client, string companyName, string cnpj, string registrationNumber = "000123")
     {
         var response = await client.PostAsJsonAsync("/api/companies", new
         {
             companyName,
+            registrationNumber,
             cnpj,
             stateRegistration = "123456789",
             credentials = new[]

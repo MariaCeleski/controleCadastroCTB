@@ -18,6 +18,7 @@ export function CompaniesTable({ companies, onEdit, onDelete }: CompaniesTablePr
       </div>
       <div className="records-table">
         <div className="records-head">
+          <span>Nº cadastro</span>
           <span>Razão social</span>
           <span>CNPJ</span>
           <span>IE</span>
@@ -25,6 +26,7 @@ export function CompaniesTable({ companies, onEdit, onDelete }: CompaniesTablePr
         </div>
         {companies.map((company) => (
           <div className="records-row" key={company.id}>
+            <span>{company.registrationNumber}</span>
             <strong>{company.companyName}</strong>
             <span>{formatCnpj(company.cnpj)}</span>
             <span>{company.stateRegistration || '—'}</span>

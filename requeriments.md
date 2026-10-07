@@ -61,6 +61,7 @@ export interface AccessCredential {
 
 export interface CompanyRecord {
   id: string;
+  registrationNumber: string; // Número interno do cadastro, preserva zeros à esquerda.
   companyName: string;
   cnpj: string; // Exibido com máscara; armazenado somente com dígitos.
   stateRegistration?: string;
@@ -78,12 +79,13 @@ No banco, a senha de uma credencial existe apenas como `encryptedPassword`. Senh
 
 ### Empresas
 
-1. Razão social obrigatória, entre 3 e 200 caracteres.
-2. CNPJ obrigatório, validado por dígito verificador e único dentro da organização cliente.
-3. CNPJ é normalizado para 14 dígitos no banco; a máscara `00.000.000/0000-00` é exclusiva da interface.
-4. Inscrição estadual é opcional e aceita texto, para comportar formatos estaduais e a condição de isento.
-5. `createdAt` é criado uma única vez; `updatedAt` é atualizado a cada alteração.
-6. Exclusão exige confirmação explícita. A definição entre exclusão lógica e definitiva precede a publicação.
+1. Número de cadastro obrigatório, com 1 a 20 dígitos, preservando zeros à esquerda e único dentro da organização cliente.
+2. Razão social obrigatória, entre 3 e 200 caracteres.
+3. CNPJ obrigatório, validado por dígito verificador e único dentro da organização cliente.
+4. CNPJ é normalizado para 14 dígitos no banco; a máscara `00.000.000/0000-00` é exclusiva da interface.
+5. Inscrição estadual é opcional e aceita texto, para comportar formatos estaduais e a condição de isento.
+6. `createdAt` é criado uma única vez; `updatedAt` é atualizado a cada alteração.
+7. Exclusão exige confirmação explícita. A definição entre exclusão lógica e definitiva precede a publicação.
 
 ### Módulos de acesso
 
@@ -101,7 +103,7 @@ Cada módulo possui rótulo, usuário e senha. Os quatro módulos existem na est
 ### Operações
 
 - Criar empresa após validar dados obrigatórios.
-- Buscar em tempo real por razão social ou CNPJ.
+- Buscar em tempo real por número de cadastro, razão social ou CNPJ.
 - Carregar registro para consulta ou edição.
 - Na edição, ignorar o próprio registro ao verificar CNPJ duplicado.
 - Ordenar e paginar resultados no servidor.
