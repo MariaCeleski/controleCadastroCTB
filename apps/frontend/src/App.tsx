@@ -86,7 +86,7 @@ export function App() {
             <label className="search">
               <Search size={18} />
               <input
-                placeholder="Buscar empresa ou CNPJ"
+                placeholder="Buscar por número, empresa ou CNPJ"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
               />

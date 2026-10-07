@@ -12,6 +12,7 @@ const modules: Array<[CredentialModule, string]> = [
 ];
 const initialForm = (): CompanyFormInput => ({
   companyName: '',
+  registrationNumber: '',
   cnpj: '',
   stateRegistration: '',
   credentials: modules.map(([module, label]) => ({ module, label, username: '', password: '' })),
@@ -32,6 +33,8 @@ export function CompanyForm({ value, onSave }: CompanyFormProps) {
     event.preventDefault();
     if (form.companyName.trim().length < 3)
       return setError('Informe uma razão social com pelo menos 3 caracteres.');
+    if (!/^\d{1,20}$/.test(form.registrationNumber))
+      return setError('Informe um número de cadastro com até 20 dígitos.');
     if (!isValidCnpj(form.cnpj)) return setError('Informe um CNPJ válido.');
     try {
       await onSave(form);
@@ -53,6 +56,20 @@ export function CompanyForm({ value, onSave }: CompanyFormProps) {
         </div>
       </div>
       <div className="fields-grid">
+        <label>
+          Número de cadastro
+          <input
+            value={form.registrationNumber}
+            onChange={(event) =>
+              setForm({
+                ...form,
+                registrationNumber: event.target.value.replace(/\D/g, ''),
+              })
+            }
+            placeholder="Ex.: 000123"
+            inputMode="numeric"
+          />
+        </label>
         <label>
           Razão social
           <input

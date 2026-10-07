@@ -7,6 +7,7 @@ public sealed class CreateCompanyRequestValidator : AbstractValidator<CreateComp
     public CreateCompanyRequestValidator()
     {
         RuleFor(x => x.CompanyName).NotEmpty().MinimumLength(3).MaximumLength(200);
+        RuleFor(x => x.RegistrationNumber).NotEmpty().MaximumLength(20).Matches("^\\d+$").WithMessage("O número de cadastro deve conter apenas dígitos.");
         RuleFor(x => x.Cnpj).Must(CnpjValidator.IsValid).WithMessage("CNPJ inválido.");
         RuleFor(x => x.Credentials).NotNull().Must(x => x.Count == 4).WithMessage("Exatamente quatro módulos são obrigatórios.");
         RuleForEach(x => x.Credentials).ChildRules(credential =>

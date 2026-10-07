@@ -9,6 +9,7 @@ export interface CredentialInput {
 
 export interface CompanyFormInput {
   companyName: string;
+  registrationNumber: string;
   cnpj: string;
   stateRegistration?: string;
   credentials: CredentialInput[];
