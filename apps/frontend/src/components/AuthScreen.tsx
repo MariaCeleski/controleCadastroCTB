@@ -1,4 +1,4 @@
-import { ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
 interface AuthScreenProps {
@@ -14,6 +14,7 @@ export function AuthScreen({ onLogin, onRegister }: AuthScreenProps) {
   const [registering, setRegistering] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -64,13 +65,24 @@ export function AuthScreen({ onLogin, onRegister }: AuthScreenProps) {
         </label>
         <label>
           Senha
-          <input
-            name="password"
-            type="password"
-            autoComplete={registering ? 'new-password' : 'current-password'}
-            required
-            minLength={12}
-          />
+          <span className="auth-password-field">
+            <input
+              name="password"
+              type={passwordVisible ? 'text' : 'password'}
+              autoComplete={registering ? 'new-password' : 'current-password'}
+              required
+              minLength={12}
+            />
+            <button
+              type="button"
+              className="auth-password-toggle"
+              aria-label={passwordVisible ? 'Ocultar senha' : 'Exibir senha'}
+              aria-pressed={passwordVisible}
+              onClick={() => setPasswordVisible(!passwordVisible)}
+            >
+              {passwordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </span>
         </label>
         {error && <p className="form-error">{error}</p>}
         <button className="primary" disabled={loading}>
