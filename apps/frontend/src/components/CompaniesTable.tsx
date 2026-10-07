@@ -16,7 +16,7 @@ export function CompaniesTable({ companies, onEdit, onDelete }: CompaniesTablePr
           <p>{companies.length} resultado(s) encontrado(s).</p>
         </div>
       </div>
-      <div className="records-table">
+      <div className="records-table company-records">
         <div className="records-head">
           <span>Nº cadastro</span>
           <span>Razão social</span>
