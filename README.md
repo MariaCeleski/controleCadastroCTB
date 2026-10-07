@@ -29,6 +29,14 @@ O comando `npm run tauri:build --workspace=@controle-acessos/frontend` gera os i
 
 ### Backend
 
+Inicie o PostgreSQL local antes da API:
+
+```bash
+docker compose up -d postgres
+```
+
+O PostgreSQL do projeto fica disponível em `localhost:5433`, para não interferir em uma instalação local já existente na porta 5432.
+
 Instale o .NET SDK 10 e execute em uma máquina com PostgreSQL configurado:
 
 ```bash
@@ -38,6 +46,8 @@ dotnet run --project apps/backend/src/AccessControl.Api
 ```
 
 Copie `apps/backend/src/AccessControl.Api/appsettings.Development.example.json` para `appsettings.Development.json` e informe a conexão local. Esse arquivo não deve ser enviado ao Git.
+
+O frontend usa `http://127.0.0.1:5001` somente no desenvolvimento. Em builds distribuídos, defina `VITE_API_URL` com a URL HTTPS definitiva da API do cliente.
 
 Para evitar credenciais em arquivos locais, prefira os User Secrets do .NET:
 

@@ -1,6 +1,7 @@
 import type { CompanyFormInput } from '../types/company';
 
-const apiUrl = import.meta.env.VITE_API_URL ?? 'https://localhost:5001';
+// Local development uses the HTTP API container; distributed builds must provide an HTTPS URL through VITE_API_URL.
+const apiUrl = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:5001';
 
 export interface Session {
   accessToken: string;
@@ -48,14 +49,21 @@ interface CompanyDetail extends Omit<CompanySummary, 'updatedAt'> {
 }
 
 async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
-  const response = await fetch(`${apiUrl}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${apiUrl}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
+    });
+  } catch {
+    throw new Error(
+      'Não foi possível conectar à API. Confirme que o ambiente local está em execução.',
+    );
+  }
   if (!response.ok)
     throw new Error(
       response.status === 401
